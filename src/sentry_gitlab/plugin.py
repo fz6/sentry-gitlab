@@ -85,7 +85,15 @@ class GitLabPlugin(IssuePlugin):
 
         data = {'title': form_data['title'], 'description': form_data['description'], 'labels': labels}
 
-        proj = gl.Project(id=repo_url)
+        try:
+            proj = gl.Project(id=repo_url)
+        except GitlabGetError:
+            # Work around GitLab bug...
+            for p in gl.Project():
+                if p.name_with_namespace == repo or p.path_with_namespace == repo:
+                    proj = p
+                    break
+        
         issue = proj.Issue(data)
         issue.save()
 
