@@ -93,7 +93,9 @@ class GitLabPlugin(IssuePlugin):
                 if p.name_with_namespace.lower() == repo.lower() or p.path_with_namespace.lower() == repo.lower():
                     proj = p
                     break
-        
+            if not proj:
+                raise ValueError("%s is not a valid repository name" % repo)
+
         issue = proj.Issue(data)
         issue.save()
 
