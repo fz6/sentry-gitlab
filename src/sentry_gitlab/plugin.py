@@ -90,7 +90,7 @@ class GitLabPlugin(IssuePlugin):
         except GitlabGetError:
             # Work around GitLab bug...
             for p in gl.Project():
-                if p.name_with_namespace == repo or p.path_with_namespace == repo:
+                if p.name_with_namespace.lower() == repo.lower() or p.path_with_namespace.lower() == repo.lower():
                     proj = p
                     break
         
